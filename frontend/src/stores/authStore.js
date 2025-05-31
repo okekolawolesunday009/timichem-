@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware"
 import axios from "axios"
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
+console.log(API_BASE_URL)
 // Mock user data for development mode
 const mockUsers = [
   { id: 1, username: "admin", password: "admin123", role: "admin" },

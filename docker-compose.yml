@@ -1,3 +1,4 @@
+version: '3.8'
 
 services:
   mongo:
@@ -42,27 +43,19 @@ services:
       - "443:443"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./nginx/ssl:/etc/letsencrypt
+      - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
     depends_on:
       - frontend
-      - backend
     restart: always
 
   certbot:
-    build: ./certbot
+    image: certbot/certbot
     container_name: certbot
     volumes:
-      - ./nginx/ssl:/etc/letsencrypt
+      - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-    entrypoint: >
-      sh -c "certbot certonly --webroot --webroot-path=/var/www/certbot
-      --email okekolawoles36@email.com --agree-tos --no-eff-email
-      -d timichem.duckdns.org &&
-      crontab -l | {{ cat; echo '0 0 * * * certbot renew --webroot-path=/var/www/certbot --quiet'; }} | crontab - &&
-      crond -f"
-
-  
+    command: certonly --webroot --webroot-path=/var/www/certbot --email okekolawolesunday@email.com -d timichem.duckdns.org --agree-tos
 
 volumes:
   mongo_data:
